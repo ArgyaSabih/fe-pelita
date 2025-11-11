@@ -4,11 +4,13 @@ import Link from "next/link";
 import Image from "next/image";
 import { cn } from "@/utils/cn";
 import { navItems, RenderNavItem } from "@/components/navbar/NavHelper";
+import { usePathname } from "next/navigation";
 import HamburgerButton from "./HamburgerButton";
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const pathname = usePathname();
   const closeMenu = useCallback(() => setIsMenuOpen(false), [setIsMenuOpen]);
 
   useEffect(() => {
@@ -19,6 +21,11 @@ export default function Navbar() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // Hide Navbar for included routes
+  if (pathname?.includes("/admin")) {
+    return null;
+  }
 
   return (
     <div className="text-neutral-1000 flex w-full justify-center">
