@@ -1,4 +1,4 @@
-import ScheduleAdmin from "@/modules/admin/ScheduleAdmin";
+import ScheduleAdmin from "@/modules/admin/schedule/ScheduleAdmin";
 
 export default function Schedule() {
   return (
