@@ -4,7 +4,7 @@ import { formatDate, truncateText } from "@/utils/admin/announcementHelper";
 
 export default function AnnouncementCard({ announcement, onEditClick, onDeleteClick }) {
   return (
-    <div className="rounded-lg border bg-[#ECF7FC] p-5 shadow-sm hover:shadow-md transition-shadow">
+    <div className="rounded-lg border-[#A9DCF1] border-r-4 border-b-4 bg-[#ECF7FC] p-5 shadow-sm hover:shadow-md transition-shadow">
       {/* Header with Title and Actions */}
       <div className="mb-3 flex items-start justify-between">
         <h3 className="text-xl font-semibold text-gray-900 flex-1 pr-4">
