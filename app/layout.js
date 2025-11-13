@@ -4,6 +4,7 @@ import Navbar from "@/components/navbar/Navbar";
 import { cn } from "@/utils/cn";
 
 import { AdlamDisplayRegular, FarroBold, FarroRegular, FarroMedium } from "@/utils/font";
+import { NavbarResolver } from "@/components/navbar/NavbarResolver";
 
 export const metadata = {
   title: "PELITA",
