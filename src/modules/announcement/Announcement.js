@@ -34,7 +34,7 @@ export default function Announcement() {
   }, []);
 
   const totalPages = Math.ceil(allAnnouncements.length / itemsPerPage);
-  
+
   // Slice data untuk halaman saat ini
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
@@ -46,7 +46,17 @@ export default function Announcement() {
   };
 
   return (
-    <div className="font-adlam-display-regular relative min-h-screen bg-white pb-20 pt-32">
+    <div className="font-adlam-display-regular relative h-full w-full overflow-y-hidden bg-white pt-32 pb-20">
+      {/* Dino Image */}
+      <div className="absolute bottom-[-5.5rem] left-[-2.5rem] h-[18rem] w-[18rem] md:h-[20rem] md:w-[20rem]">
+        <Image
+          src="/assets/schedule/dino-lucu.webp"
+          fill
+          alt="dino aset"
+          className="object-contain"
+        />
+      </div>
+
       {/* Main Content Container */}
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header Section */}
@@ -91,52 +101,22 @@ export default function Announcement() {
         {/* Pagination */}
         {!loading && !error && totalPages > 1 && (
           <div className="relative z-20 mt-8 flex items-center justify-end gap-2">
-            <button
-              onClick={() => handlePageChange(currentPage - 1)}
-              disabled={currentPage === 1}
-              className="cursor-pointer rounded-lg bg-gray-200 px-4 py-2 font-medium text-gray-700 transition-colors hover:bg-gray-300 disabled:cursor-not-allowed disabled:opacity-50"
-            >
-              Prev
-            </button>
-
             {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
               <button
                 key={page}
                 onClick={() => handlePageChange(page)}
                 className={`cursor-pointer rounded-lg px-4 py-2 font-medium transition-colors ${
                   currentPage === page
-                    ? "bg-[#FEE4B8] text-gray-900"
-                    : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                    ? "bg-yellow-primary-300 text-gray-900"
+                    : "hover:bg-yellow-primary-200 bg-gray-200 text-gray-700"
                 }`}
               >
                 {page}
               </button>
             ))}
-
-            <button
-              onClick={() => handlePageChange(currentPage + 1)}
-              disabled={currentPage === totalPages}
-              className="cursor-pointer rounded-lg bg-gray-200 px-4 py-2 font-medium text-gray-700 transition-colors hover:bg-gray-300 disabled:cursor-not-allowed disabled:opacity-50"
-            >
-              Next
-            </button>
           </div>
         )}
-      </div>
-
-      {/* Dino Image - Fixed at Bottom Left */}
-      <div className="pointer-events-none fixed bottom-0 left-0 z-10">
-        <div className="relative h-[180px] w-[180px] sm:h-[220px] sm:w-[220px] md:h-[280px] md:w-[280px]">
-          <Image
-            src="/assets/annoucement/dino_cutted.png"
-            alt="Dino"
-            fill
-            className="object-contain object-bottom"
-            priority
-          />
-        </div>
       </div>
     </div>
   );
 }
-
