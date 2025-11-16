@@ -1,4 +1,3 @@
-// src/modules/register/Register.js
 "use client";
 
 import { useState } from "react";
@@ -11,7 +10,7 @@ import { registerUser } from "@/utils/helpers/authHelper";
 export default function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [rePassword, setRePassword] = useState(""); // <-- State baru
+  const [rePassword, setRePassword] = useState("");
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
@@ -21,13 +20,11 @@ export default function Register() {
     setLoading(true);
     setError(null);
 
-    // --- Validasi Baru ---
     if (password !== rePassword) {
       setError("Password tidak cocok.");
       setLoading(false);
       return;
     }
-    // --- Akhir Validasi ---
 
     try {
       // Helper Anda sudah benar (menerima email & password)
