@@ -6,7 +6,7 @@ import fetchAPI from "@/utils/api/fetchAPI";
  */
 export const registerUser = async (email, password) => {
   try {
-    const response = await fetchAPI.post("/users/register", {
+    const response = await fetchAPI.post("/api/users/register", {
       email,
       password,
     });
@@ -27,7 +27,7 @@ export const registerUser = async (email, password) => {
  */
 export const completeProfile = async (profileData) => {
   try {
-    const response = await fetchAPI.put("/users/complete-profile", profileData);
+    const response = await fetchAPI.put("/api/users/complete-profile", profileData);
     return response.data;
   } catch (error) {
     console.error("Complete profile error:", error.response?.data?.message || error.message);
@@ -41,7 +41,7 @@ export const completeProfile = async (profileData) => {
  */
 export const loginUser = async (email, password) => {
   try {
-    const response = await fetchAPI.post("/users/login", {
+    const response = await fetchAPI.post("/api/users/login", {
       email,
       password,
     });
