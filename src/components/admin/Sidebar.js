@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
   AiOutlineHome,
   AiOutlineCalendar,
@@ -9,7 +9,9 @@ import {
   AiOutlineUser,
   AiOutlineMessage,
 } from "react-icons/ai";
+import { CiLogout } from "react-icons/ci";
 import Image from "next/image";
+import Swal from "sweetalert2";
 
 const items = [
   { href: "/admin", label: "Overview", icon: AiOutlineHome },
@@ -27,10 +29,39 @@ function normalizePath(p) {
 
 export default function Sidebar() {
   const pathname = normalizePath(usePathname() || "/admin");
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    const result = await Swal.fire({
+      title: "Apakah Anda yakin ingin logout?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Logout",
+      confirmButtonColor: "red",
+      cancelButtonText: "Batal",
+    });
+
+    if (result.isConfirmed) {
+      try {
+        localStorage.removeItem("accessToken");
+      } catch (e) {
+        // ignore
+      }
+      // remove cookies if present
+      try {
+        document.cookie = `accessToken=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT`;
+        document.cookie = `role=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT`;
+      } catch (e) {
+        // ignore
+      }
+
+      router.push("/login");
+    }
+  };
 
   return (
     <aside className="font-adlam-display-regular bg-dark-500 flex min-h-screen w-72 flex-col items-stretch px-6 py-6 text-white">
-      <div className="mb-4 flex flex-[0.1] items-center px-2 pr-10">
+      <div className="mb-4 flex h-[6rem] w-full items-center px-2 pr-10">
         <div className="relative h-full w-[15rem]">
           <Image
             src="/assets/favicon/logo-desktop-admin.webp"
@@ -63,6 +94,16 @@ export default function Sidebar() {
             );
           })}
         </ul>
+        <div className="mt-4 px-2">
+          <button
+            type="button"
+            onClick={handleLogout}
+            className="group flex w-full cursor-pointer items-center gap-4 rounded-lg bg-red-500 px-4 py-3 text-white hover:opacity-90"
+          >
+            <CiLogout className="h-6 w-6" />
+            <span className="text-[1.1rem]">Logout</span>
+          </button>
+        </div>
       </nav>
     </aside>
   );
