@@ -58,7 +58,7 @@ export default function ModalEditFeedback({
             <select
               value={type}
               onChange={(e) => setType(e.target.value)}
-              className="mt-1 w-full rounded-md border p-2 outline-none focus:ring-2 focus:ring-yellow-300"
+              className="mt-1 w-full rounded-md border p-2 bg-white text-gray-900 outline-none focus:ring-2 focus:ring-yellow-300"
               required
             >
               <option value="saran">Saran</option>
@@ -74,7 +74,7 @@ export default function ModalEditFeedback({
             <textarea
               value={content}
               onChange={(e) => setContent(e.target.value)}
-              className="mt-1 w-full h-28 rounded-md border p-2 outline-none focus:ring-2 focus:ring-yellow-300"
+              className="mt-1 w-full h-28 rounded-md border p-2 bg-white text-gray-900 outline-none focus:ring-2 focus:ring-yellow-300"
               required
             ></textarea>
           </div>

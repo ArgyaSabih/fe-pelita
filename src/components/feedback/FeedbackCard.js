@@ -15,7 +15,8 @@ export default function FeedbackCard({ feedback, onEditClick, onDeleteClick }) {
         
         {/* Title = ID + type */}
         <h3 className="text-xl font-semibold text-gray-900 flex-1 pr-4">
-          ID {String(feedback._id).slice(-4)}: {feedback.type}
+          <span className="font-bold">ID {String(feedback._id).slice(-4)}</span> •{" "}
+          <span className="capitalize">{feedback.type}</span>
         </h3>
 
         {/* Action buttons */}

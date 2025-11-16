@@ -1,58 +1,76 @@
 import fetchAPI from "@/utils/api/fetchAPI";
 
-export async function fetchFeedbacks({ page = 1, pageSize = 10, q = "" } = {}) {
-  const res = await fetchAPI.get("/feedbacks", {
-    params: {
-      page,
-      pageSize,
-      q,
-    },
-  });
-  const data = res.data;
-  let fetchedItems = [];
-  let fetchedTotal = 0;
+export async function fetchUser() {
+  try {
+    const res = await fetchAPI.get("/users/profile");
+    const user = res.data.data.user;
 
-  if (Array.isArray(data)) {
-    fetchedItems = data;
-    fetchedTotal = data.length;
-  } else if (data.data) {
-    fetchedItems = data.data;
-    fetchedTotal = data.count ?? data.total ?? fetchedItems.length;
-  } else if (data.items) {
-    fetchedItems = data.items;
-    fetchedTotal = data.total ?? data.count ?? fetchedItems.length;
-  } else {
-    fetchedItems = data.results ?? data.rows ?? [];
-    fetchedTotal = data.total ?? data.count ?? fetchedItems.length;
+    return {
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+    };
+  } catch (err) {
+    console.error("Failed to fetch user profile:", err);
+    return null;
   }
-
-  return { items: fetchedItems, total: fetchedTotal };
 }
 
-export async function createFeedback(feedbackData) {
-  const res = await fetchAPI.post("/feedbacks", feedbackData);
+export async function fetchFeedbacks({ page = 1, pageSize = 10, q = "" }) {
+  const res = await fetchAPI.get(`/feedbacks`, {
+    params: { page, pageSize, q },
+    withCredentials: true,
+  });
+
+  return {
+    items: res.data.data || [],
+    total: res.data.count || 0,
+  };
+}
+
+export async function fetchFeedbacksByParent(parentId) {
+  const res = await fetchAPI.get(`/feedbacks/user/${parentId}`);
+  return {
+    items: res.data.data,
+    total: res.data.data.length
+  };
+}
+
+export async function createFeedback(payload) {
+  const res = await fetchAPI.post("/feedbacks", payload);
   return res.data.data;
 }
 
-export async function updateFeedback(feedbackId, feedbackData) {
-  const res = await fetchAPI.put(`/feedbacks/${feedbackId}`, feedbackData);
-  return res.data;
+export async function updateFeedback(id, payload) {
+  const res = await fetchAPI.put(`/feedbacks/${id}`, payload);
+  return res.data.data;
 }
 
-export async function deleteFeedback(feedbackId) {
-  const res = await fetchAPI.delete(`/feedbacks/${feedbackId}`);
-  return res.data;
+export async function deleteFeedback(id) {
+  const res = await fetchAPI.delete(`/feedbacks/${id}`);
+  return res.data.data;
 }
 
 export function filterFeedbacks(items, query) {
   if (!query) return items;
+
   const lowerQuery = query.toLowerCase();
+
   return items.filter((item) => {
-    const parent = String(item.parent?.email || "").toLowerCase();
-    const type = String(item.type || "").toLowerCase();
-    const content = String(item.content || "").toLowerCase();
-    const createdAt = String(item.createdAt || "").toLowerCase();
-    return parent.includes(lowerQuery) || type.includes(lowerQuery) || content.includes(lowerQuery) || createdAt.includes(lowerQuery);
+    const parentName   = String(item.parent?.name || "").toLowerCase();
+    const parentEmail  = String(item.parent?.email || "").toLowerCase();
+    const type         = String(item.type || "").toLowerCase();
+    const content      = String(item.content || "").toLowerCase();
+    const createdAt    = String(item.createdAt || "").toLowerCase();
+
+    return (
+      parentName.includes(lowerQuery) ||
+      parentEmail.includes(lowerQuery) ||
+      type.includes(lowerQuery) ||
+      content.includes(lowerQuery) ||
+      createdAt.includes(lowerQuery)
+    );
   });
 }
 

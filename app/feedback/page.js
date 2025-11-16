@@ -1,6 +1,5 @@
-import Announcement from "@/modules/announcement/Announcement";
+import Feedback from "@/modules/feedback/Feedback";
 
-export default function AnnouncementPage() {
-  return <Announcement />;
+export default function Page() {
+  return <Feedback />;
 }
-

@@ -53,10 +53,10 @@ export default function ModalCreateFeedback({
             </label>
 
             <select
-              value={type}
-              onChange={(e) => setType(e.target.value)}
-              className="w-full rounded-md border p-2 outline-none focus:ring-2 focus:ring-blue-300"
-              required
+            value={type}
+            onChange={(e) => setType(e.target.value)}
+            className="w-full rounded-md border p-2 bg-white text-gray-900 outline-none focus:ring-2 focus:ring-blue-300"
+            required
             >
               <option value="">Pilih Tipe</option>
               <option value="saran">Saran</option>
@@ -71,10 +71,10 @@ export default function ModalCreateFeedback({
             </label>
 
             <textarea
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-              className="w-full h-28 rounded-md border p-2 outline-none focus:ring-2 focus:ring-blue-300"
-              required
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
+                className="w-full h-28 rounded-md border p-2 bg-white text-gray-900 outline-none focus:ring-2 focus:ring-blue-300"
+                required
             ></textarea>
           </div>
 

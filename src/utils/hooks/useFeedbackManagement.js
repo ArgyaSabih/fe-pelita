@@ -1,189 +1,133 @@
 import { useState, useEffect } from "react";
 import {
+  fetchUser,
   fetchFeedbacks,
+  fetchFeedbacksByParent,
   filterFeedbacks,
   createFeedback,
   updateFeedback,
   deleteFeedback,
 } from "@/utils/feedback/feedbackHelper";
-import Swal from "sweetalert2";
 
-export function useFeedbackManagement(pageSize = 10) {
+export function useFeedbackManagement({
+  pageSize = 10,
+  mode = "admin",
+  parentId = null
+}) {
+  // profile
+  const [user, setUser] = useState(null);
+
+  // search + pagination
   const [query, setQuery] = useState("");
   const [page, setPage] = useState(1);
+
+  // data
   const [items, setItems] = useState([]);
   const [total, setTotal] = useState(0);
+
+  // loading & error
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  // refresh trigger
   const [refreshTrigger, setRefreshTrigger] = useState(0);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [selectedFeedback, setSelectedFeedback] = useState(null);
+
+  // load user only once
+  useEffect(() => {
+    fetchUser().then((u) => setUser(u));
+  }, []);
 
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
 
-  // Fetch feedbacks from API
+  // MAIN FETCH
   useEffect(() => {
     let mounted = true;
 
-    const fetchData = async () => {
+    const load = async () => {
       setLoading(true);
       setError(null);
 
       try {
-        const { items: fetchedItems, total: fetchedTotal } = await fetchFeedbacks({
-          page,
-          pageSize,
-          q: query,
-        });
+        let allData = [];
+
+        if (mode === "admin") {
+          // 👉 Admin selalu ambil SEMUA tanpa paging
+          const res = await fetchFeedbacks({ page: 1, pageSize: 99999 });
+          allData = res.items || [];
+        } else {
+          // 👉 User hanya ambil feedback dari parentId
+          if (!parentId) return;
+          const res = await fetchFeedbacksByParent(parentId);
+          allData = res.items || [];
+        }
 
         if (!mounted) return;
 
-        const normalizedQuery = String(query || "").trim().toLowerCase();
-        
-        // Filter locally if needed
-        const filtered = normalizedQuery
-          ? filterFeedbacks(fetchedItems, normalizedQuery)
-          : fetchedItems;
-        
-        const startIndex = (page - 1) * pageSize;
-        setItems(filtered.slice(startIndex, startIndex + pageSize));
+        // search filter
+        const normalized = query.trim().toLowerCase();
+        const filtered = normalized
+          ? filterFeedbacks(allData, normalized)
+          : allData;
+
+        // client-side pagination
+        const start = (page - 1) * pageSize;
+        const paginated = filtered.slice(start, start + pageSize);
+
+        setItems(paginated);
         setTotal(filtered.length);
       } catch (err) {
         if (!mounted) return;
-        setItems([]);
-        setTotal(0);
-        setError(err.message || String(err));
-        console.error("Failed to fetch feedbacks:", err);
+        setError(err.message || "Gagal memuat data");
       } finally {
         if (mounted) setLoading(false);
       }
     };
 
-    fetchData();
-    return () => {
-      mounted = false;
-    };
-  }, [page, pageSize, query, refreshTrigger]);
+    load();
+    return () => { mounted = false };
 
-  // Pagination Handler
-  const goTo = (targetPage) => {
-    const validPage = Math.min(Math.max(1, targetPage), totalPages);
-    setPage(validPage);
+  }, [page, query, refreshTrigger, parentId, mode, pageSize]);
+
+  // Reset page saat query berubah
+  const setQuerySafe = (q) => {
+    setQuery(q);
+    setPage(1);
   };
 
-  // Helper Functions
-  const showAlert = (type, message) => {
-    const config = {
-      success: {
-        icon: "success",
-        title: "Berhasil!",
-        confirmButtonColor: "#38bdf8",
-      },
-      error: {
-        icon: "error",
-        title: "Error!",
-        confirmButtonColor: "#ef4444",
-      },
-    };
-
-    Swal.fire({
-      ...config[type],
-      text: message,
-    });
+  // pagination
+  const goTo = (p) => {
+    if (p < 1 || p > totalPages) return;
+    setPage(p);
   };
 
-  const closeModalAndRefresh = (setModalOpen) => {
-    setModalOpen(false);
-    setSelectedFeedback(null);
-    setRefreshTrigger((prev) => prev + 1);
-  };
-
-  // CRUD Handlers
-  const handleCreateFeedback = async (feedbackData) => {
-    try {
-      await createFeedback(feedbackData);
-      setIsModalOpen(false);
-      setRefreshTrigger((prev) => prev + 1);
-      setPage(1);
-      showAlert("success", "Feedback berhasil dibuat!");
-    } catch (err) {
-      const errorMsg = err.response?.data?.message || err.message || "Gagal membuat feedback";
-      showAlert("error", errorMsg);
-    }
-  };
-
-  const handleUpdateFeedback = async (formData) => {
-    try {
-      const feedbackId = formData._id || formData.id;
-      await updateFeedback(feedbackId, {
-        type: formData.type,
-        content: formData.content,
-      });
-      closeModalAndRefresh(setIsUpdateModalOpen);
-      showAlert("success", "Feedback berhasil diupdate!");
-    } catch (err) {
-      const errorMsg = err.response?.data?.message || err.message || "Gagal mengupdate feedback";
-      showAlert("error", errorMsg);
-    }
-  };
-
-  const handleConfirmDelete = async (feedback) => {
-    try {
-      const feedbackId = feedback._id || feedback.id;
-      await deleteFeedback(feedbackId);
-      closeModalAndRefresh(setIsDeleteModalOpen);
-      showAlert("success", "Feedback berhasil dihapus!");
-    } catch (err) {
-      const errorMsg = err.response?.data?.message || err.message || "Gagal menghapus feedback";
-      showAlert("error", errorMsg);
-    }
-  };
-
-  // Modal Handlers
-  const handleEditClick = (feedback) => {
-    setSelectedFeedback(feedback);
-    setIsUpdateModalOpen(true);
-  };
-
-  const handleDeleteClick = (feedback) => {
-    setSelectedFeedback(feedback);
-    setIsDeleteModalOpen(true);
-  };
-
-  const openCreateModal = () => setIsModalOpen(true);
-  const closeCreateModal = () => setIsModalOpen(false);
+  // CRUD
+  const refresh = () => setRefreshTrigger((n) => n + 1);
 
   return {
-    // State
     query,
-    setQuery,
+    setQuery: setQuerySafe,
     page,
     totalPages,
     items,
+    user,
     loading,
     error,
 
-    // Modal States
-    isModalOpen,
-    isUpdateModalOpen,
-    isDeleteModalOpen,
-    selectedFeedback,
-
-    // Handlers
     goTo,
-    handleCreateFeedback,
-    handleUpdateFeedback,
-    handleConfirmDelete,
-    handleEditClick,
-    handleDeleteClick,
-    openCreateModal,
-    closeCreateModal,
-    closeModalAndRefresh,
 
-    // Modal setters for manual control
-    setIsUpdateModalOpen,
-    setIsDeleteModalOpen,
+    // CRUD ops
+    async handleCreateFeedback(data) {
+      await createFeedback(data);
+      refresh();
+      setPage(1);
+    },
+    async handleUpdateFeedback(data) {
+      await updateFeedback(data._id, data);
+      refresh();
+    },
+    async handleConfirmDelete(data) {
+      await deleteFeedback(data._id);
+      refresh();
+    },
   };
 }
