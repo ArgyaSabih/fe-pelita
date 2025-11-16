@@ -70,8 +70,6 @@ export const loginUser = async (email, password) => {
 export const completeGoogleRegistration = async (profileData) => {
   // profileData = { tempToken, name, phoneNumber, address, childCode }
   try {
-    // Kita panggil 'fetch' biasa di sini karena ini endpoint publik
-    // yang tidak menggunakan 'Bearer' token
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/api/auth/google/registration`,
       {
@@ -87,7 +85,6 @@ export const completeGoogleRegistration = async (profileData) => {
       throw new Error(data.message || "Registrasi Google gagal");
     }
 
-    // Jika sukses, backend akan mengirim token login penuh
     const { token, user } = data.data;
     if (token) {
       localStorage.setItem("accessToken", token);
@@ -96,5 +93,49 @@ export const completeGoogleRegistration = async (profileData) => {
   } catch (error) {
     console.error("Google registration error:", error.message);
     throw error;
+  }
+};
+
+/**
+ * Mengambil data profil user yang sedang login
+ * Memanggil: GET /api/users/profile
+ */
+export const getProfile = async () => {
+  try {
+    const response = await fetchAPI.get("/api/users/profile");
+    return response.data.data.user;
+  } catch (error) {
+    console.error("Get Profile error:", error.response?.data?.message || error.message);
+    throw new Error(error.response?.data?.message || "Gagal mengambil profil");
+  }
+};
+
+/**
+ * Memperbarui data profil user (Orang Tua)
+ * Memanggil: PUT /api/users/profile
+ */
+export const updateProfile = async (profileData) => {
+  // profileData = { name, phoneNumber, address }
+  try {
+    const response = await fetchAPI.put("/api/users/profile", profileData);
+    return response.data.data.user;
+  } catch (error) {
+    console.error("Update Profile error:", error.response?.data?.message || error.message);
+    throw new Error(error.response?.data?.message || "Gagal memperbarui profil");
+  }
+};
+
+/**
+ * Memperbarui data anak (Medical Record & Notes)
+ * Memanggil: PUT /api/children/:id
+ */
+export const updateChild = async (childId, childData) => {
+  // childData = { medicalRecord, notes }
+  try {
+    const response = await fetchAPI.put(`/api/children/${childId}`, childData);
+    return response.data.data;
+  } catch (error) {
+    console.error("Update Child error:", error.response?.data?.message || error.message);
+    throw new Error(error.response?.data?.message || "Gagal memperbarui data anak");
   }
 };
