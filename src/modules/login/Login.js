@@ -102,7 +102,7 @@ export default function Login() {
         <div className="mt-4 text-left">
           <Link
             href="/lupa-password"
-            className="text-blue-primary-500 hover:text-blue-primary-600 text-sm font-semibold transition-colors hover:underline"
+            className="text-sm font-semibold transition-colors text-blue-primary-500 hover:text-blue-primary-600 hover:underline"
           >
             Lupa Password?
           </Link>
@@ -116,7 +116,7 @@ export default function Login() {
 
         {/* 9. Tombol Google (WAJIB <a> tag, bukan <button>) */}
         <a
-          href={`${process.env.NEXT_PUBLIC_API_URL}/api/auth/google`}
+          href={`${process.env.NEXT_PUBLIC_API_URL}/auth/google`}
           className="flex w-full items-center justify-center rounded-lg border border-gray-300 bg-white py-3 transition-all duration-300 hover:bg-gray-50 hover:shadow-md"
         >
           <Image

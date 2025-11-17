@@ -123,7 +123,7 @@ export default function Register() {
 
         {/* Tombol Google (Link <a>) */}
         <a
-          href={`${process.env.NEXT_PUBLIC_API_URL}/api/auth/google`}
+          href={`${process.env.NEXT_PUBLIC_API_URL}/auth/google`}
           className="flex w-full items-center justify-center rounded-lg border border-gray-300 bg-white py-3 transition-all duration-300 hover:bg-gray-50 hover:shadow-md"
         >
           <Image

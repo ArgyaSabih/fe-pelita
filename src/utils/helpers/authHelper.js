@@ -6,7 +6,7 @@ import fetchAPI from "@/utils/api/fetchAPI";
  */
 export const registerUser = async (email, password) => {
   try {
-    const response = await fetchAPI.post("/api/users/register", {
+    const response = await fetchAPI.post("/users/register", {
       email,
       password,
     });
@@ -27,7 +27,7 @@ export const registerUser = async (email, password) => {
  */
 export const completeProfile = async (profileData) => {
   try {
-    const response = await fetchAPI.put("/api/users/complete-profile", profileData);
+    const response = await fetchAPI.put("/users/complete-profile", profileData);
     return response.data;
   } catch (error) {
     console.error("Complete profile error:", error.response?.data?.message || error.message);
@@ -41,7 +41,7 @@ export const completeProfile = async (profileData) => {
  */
 export const loginUser = async (email, password) => {
   try {
-    const response = await fetchAPI.post("/api/users/login", {
+    const response = await fetchAPI.post("/users/login", {
       email,
       password,
     });
@@ -65,19 +65,16 @@ export const loginUser = async (email, password) => {
 
 /**
  * Melengkapi profil user (Langkah 2: Alur Google BARU)
- * Memanggil: POST /api/auth/google/registration
+ * Memanggil: POST /auth/google/registration
  */
 export const completeGoogleRegistration = async (profileData) => {
   // profileData = { tempToken, name, phoneNumber, address, childCode }
   try {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/auth/google/registration`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(profileData),
-      },
-    );
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/google/registration`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(profileData),
+    });
 
     const data = await response.json();
 
@@ -102,7 +99,7 @@ export const completeGoogleRegistration = async (profileData) => {
  */
 export const getProfile = async () => {
   try {
-    const response = await fetchAPI.get("/api/users/profile");
+    const response = await fetchAPI.get("/users/profile");
     return response.data.data.user;
   } catch (error) {
     console.error("Get Profile error:", error.response?.data?.message || error.message);
@@ -117,7 +114,7 @@ export const getProfile = async () => {
 export const updateProfile = async (profileData) => {
   // profileData = { name, phoneNumber, address }
   try {
-    const response = await fetchAPI.put("/api/users/profile", profileData);
+    const response = await fetchAPI.put("/users/profile", profileData);
     return response.data.data.user;
   } catch (error) {
     console.error("Update Profile error:", error.response?.data?.message || error.message);
@@ -132,7 +129,7 @@ export const updateProfile = async (profileData) => {
 export const updateChild = async (childId, childData) => {
   // childData = { medicalRecord, notes }
   try {
-    const response = await fetchAPI.put(`/api/children/${childId}`, childData);
+    const response = await fetchAPI.put(`/children/${childId}`, childData);
     return response.data.data;
   } catch (error) {
     console.error("Update Child error:", error.response?.data?.message || error.message);
