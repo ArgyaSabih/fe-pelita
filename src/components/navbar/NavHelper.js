@@ -1,18 +1,18 @@
 "use client";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { IoChevronForward } from "react-icons/io5";
 import { CgProfile } from "react-icons/cg";
 import { cn } from "@/utils/cn";
 import { memo } from "react";
+import Swal from "sweetalert2";
 
 export const navItems = [
   { href: "/schedule", label: "Schedule", type: ["underline"] },
   { href: "/feedback", label: "Feedback", type: ["underline"] },
   { href: "/announcement", label: "Announcement", type: ["underline"] },
   { href: "/permission", label: "Permission", type: ["underline"] },
-  { href: "/register", label: "Register", type: ["register"] },
-  { href: "/login", label: "Login", type: ["login"] },
+  { href: "/login", label: "Logout", type: ["logout"] },
   { href: "/profile", label: "Profile", type: ["profile"] },
 ];
 
@@ -29,11 +29,14 @@ const navItemsType = {
   bellIcon:
     "flex-none self-center lg:mt-0 mr-2 block w-[0.9rem] sm:w-[1.1rem] lg:w-[1.3rem] items-center lg:pt-0.5 2xl:w-[1.3rem] h-auto",
   activeUnderline: "absolute bottom-0 left-0 h-0.5 w-full bg-black",
+  logout:
+    "relative cursor-pointer bg-blue-primary-200 max-lg:py-4 max-lg:px-4 hover:bg-blue-primary-400 max-lg:justify-center min-w-[6rem]",
 };
 
 export const RenderNavItem = memo(
   ({ item, onNavigate = () => {} }) => {
     const pathname = usePathname();
+    const router = useRouter();
     const types = Array.isArray(item.type) ? item.type : [item.type];
     const typeClasses = types.map((type) => navItemsType[type] || "").join(" ");
     const combinedClass = cn(navItemsType.base, typeClasses);
@@ -53,13 +56,47 @@ export const RenderNavItem = memo(
       ? types.map((t) => activeTypeClassMap[t] || "").join(" ")
       : "";
 
+    const handleLogout = async () => {
+      const result = await Swal.fire({
+        title: "Apakah Anda yakin ingin logout?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Logout",
+        confirmButtonColor: "red",
+        cancelButtonText: "Batal",
+      });
+
+      if (result.isConfirmed) {
+        try {
+          localStorage.removeItem("accessToken");
+        } catch (e) {
+          // ignore
+        }
+        onNavigate();
+        router.push("/login");
+      }
+    };
+
+    if (types.includes("logout")) {
+      return (
+        <button
+          type="button"
+          aria-label={item.label}
+          className={cn(combinedClass, "font-farro-medium text-center")}
+          onClick={handleLogout}
+        >
+          {item.label}
+        </button>
+      );
+    }
+
     return (
       <Link
         href={item.href}
         target={"_self"}
         aria-label={item.label}
         className={cn(combinedClass, activeClassForRender, "font-farro-medium")}
-        onNavigate={onNavigate}
+        onClick={onNavigate}
       >
         {types.includes("profile") ? (
           <>

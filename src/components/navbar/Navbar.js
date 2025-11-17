@@ -23,7 +23,9 @@ export default function Navbar() {
   }, []);
 
   // Hide Navbar for included routes
-  if (pathname?.includes("/admin")) {
+  const isAuthRoute = pathname?.includes("/login") || pathname?.includes("/register");
+
+  if (pathname?.includes("/admin") || isAuthRoute) {
     return null;
   }
 
