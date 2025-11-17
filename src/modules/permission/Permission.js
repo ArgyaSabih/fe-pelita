@@ -27,8 +27,7 @@ export default function Permission() {
   };
 
   return (
-    <div className="font-adlam-display-regular relative min-h-screen w-full bg-white pt-32 pb-20">
-
+    <div className="font-adlam-display-regular relative z-[-10] min-h-screen w-full bg-white pt-32 pb-20">
       {/* Dino image */}
       <div className="pointer-events-none absolute bottom-[-5.5rem] left-[-2.5rem] h-[18rem] w-[18rem] md:h-[20rem] md:w-[20rem]">
         <Image
@@ -39,14 +38,11 @@ export default function Permission() {
         />
       </div>
 
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-
+      <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header With Button */}
         <div className="mb-8 flex items-center justify-between">
           <div>
-            <h1 className="mb-2 text-4xl font-bold text-gray-900 md:text-4xl">
-              Surat Izin Siswa
-            </h1>
+            <h1 className="mb-2 text-4xl font-bold text-gray-900 md:text-4xl">Surat Izin Siswa</h1>
             <p className="text-lg text-gray-700">
               Ajukan surat izin siswa dan lihat proses pengajuannya di sini
             </p>
@@ -54,12 +50,11 @@ export default function Permission() {
 
           <Link
             href="/permission/create"
-            className="flex items-center gap-3 bg-[#112456] text-white 
-                      px-5 py-3 rounded-xl hover:bg-[#0d1a3f] transition shadow-sm"
+            className="flex items-center gap-3 rounded-xl bg-[#112456] px-5 py-3 text-white shadow-sm transition hover:bg-[#0d1a3f]"
           >
             <FiPlus className="text-2xl text-white" />
-            <div className="flex flex-col leading-tight text-left">
-              <span className="font-semibold text-base">Tambah Surat Izin</span>
+            <div className="flex flex-col text-left leading-tight">
+              <span className="text-base font-semibold">Tambah Surat Izin</span>
             </div>
           </Link>
         </div>
@@ -123,4 +118,3 @@ export default function Permission() {
     </div>
   );
 }
-

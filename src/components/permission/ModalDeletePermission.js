@@ -1,12 +1,7 @@
 "use client";
 import { IoClose } from "react-icons/io5";
 
-export default function ModalDeletePermission({
-  isOpen,
-  onClose,
-  onDelete,
-  permissionData
-}) {
+export default function ModalDeletePermission({ isOpen, onClose, onDelete, permissionData }) {
   if (!isOpen || !permissionData) return null;
 
   const handleDelete = () => {
@@ -17,8 +12,7 @@ export default function ModalDeletePermission({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-      <div className="relative w-full max-w-md rounded-lg border border-red-300 bg-white p-6 shadow-lg text-gray-900">
-
+      <div className="relative w-full max-w-md rounded-lg border border-red-300 bg-white p-6 text-gray-900 shadow-lg">
         {/* Close Button */}
         <button
           onClick={onClose}
@@ -29,9 +23,7 @@ export default function ModalDeletePermission({
         </button>
 
         {/* Title */}
-        <h2 className="mb-4 text-lg font-semibold text-gray-900">
-          Hapus Surat Izin
-        </h2>
+        <h2 className="mb-4 text-lg font-semibold text-gray-900">Hapus Surat Izin</h2>
 
         {/* Message */}
         <p className="mb-6 text-gray-800">
@@ -41,13 +33,11 @@ export default function ModalDeletePermission({
         {/* Delete Button */}
         <button
           onClick={handleDelete}
-          className="w-full rounded-md bg-red-500 py-3 text-white font-semibold hover:bg-red-600 transition-colors"
+          className="w-full cursor-pointer rounded-md bg-red-500 py-3 font-semibold text-white transition-colors hover:bg-red-600"
         >
           Hapus
         </button>
-
       </div>
     </div>
   );
 }
-

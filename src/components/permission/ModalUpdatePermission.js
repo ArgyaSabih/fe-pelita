@@ -2,12 +2,7 @@
 import { useState, useEffect } from "react";
 import { IoClose } from "react-icons/io5";
 
-export default function ModalUpdatePermission({
-  isOpen,
-  onClose,
-  onUpdate,
-  permissionData
-}) {
+export default function ModalUpdatePermission({ isOpen, onClose, onUpdate, permissionData }) {
   const [studentName, setStudentName] = useState("");
   const [reason, setReason] = useState("");
   const [startDate, setStartDate] = useState("");
@@ -19,17 +14,17 @@ export default function ModalUpdatePermission({
     if (permissionData) {
       setStudentName(permissionData.studentName || "");
       setReason(permissionData.reason || "");
-      
+
       // Format dates for input (YYYY-MM-DD)
       if (permissionData.startDate) {
         const start = new Date(permissionData.startDate);
-        setStartDate(start.toISOString().split('T')[0]);
+        setStartDate(start.toISOString().split("T")[0]);
       }
       if (permissionData.endDate) {
         const end = new Date(permissionData.endDate);
-        setEndDate(end.toISOString().split('T')[0]);
+        setEndDate(end.toISOString().split("T")[0]);
       }
-      
+
       setSupportingDocument(permissionData.supportingDocument || "");
     }
   }, [permissionData]);
@@ -65,7 +60,6 @@ export default function ModalUpdatePermission({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
       <div className="relative w-full max-w-md rounded-lg border border-yellow-300 bg-white p-6 shadow-lg">
-
         {/* Close Button */}
         <button
           onClick={onClose}
@@ -75,12 +69,10 @@ export default function ModalUpdatePermission({
         </button>
 
         {/* Title */}
-        <h2 className="mb-4 text-lg font-semibold text-gray-900">
-          Edit Surat Izin
-        </h2>
+        <h2 className="mb-4 text-lg font-semibold text-gray-900">Edit Surat Izin</h2>
 
         {!canEdit && (
-          <div className="mb-4 rounded-md bg-yellow-50 border border-yellow-200 p-3">
+          <div className="mb-4 rounded-md border border-yellow-200 bg-yellow-50 p-3">
             <p className="text-sm text-yellow-800">
               Hanya surat izin dengan status pending yang dapat diubah
             </p>
@@ -89,7 +81,6 @@ export default function ModalUpdatePermission({
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-
           {/* Student Name */}
           <div>
             <label className="block text-sm font-medium text-gray-700">
@@ -99,7 +90,7 @@ export default function ModalUpdatePermission({
               type="text"
               value={studentName}
               onChange={(e) => setStudentName(e.target.value)}
-              className="mt-1 w-full rounded-md border p-2 bg-white text-gray-900 outline-none focus:ring-2 focus:ring-yellow-300"
+              className="mt-1 w-full rounded-md border bg-white p-2 text-gray-900 outline-none focus:ring-2 focus:ring-yellow-300"
               required
               disabled={!canEdit}
             />
@@ -113,7 +104,7 @@ export default function ModalUpdatePermission({
             <textarea
               value={reason}
               onChange={(e) => setReason(e.target.value)}
-              className="mt-1 w-full h-28 rounded-md border p-2 bg-white text-gray-900 outline-none focus:ring-2 focus:ring-yellow-300"
+              className="mt-1 h-28 w-full rounded-md border bg-white p-2 text-gray-900 outline-none focus:ring-2 focus:ring-yellow-300"
               required
               disabled={!canEdit}
             ></textarea>
@@ -128,7 +119,7 @@ export default function ModalUpdatePermission({
               type="date"
               value={startDate}
               onChange={(e) => setStartDate(e.target.value)}
-              className="mt-1 w-full rounded-md border p-2 bg-white text-gray-900 outline-none focus:ring-2 focus:ring-yellow-300"
+              className="mt-1 w-full rounded-md border bg-white p-2 text-gray-900 outline-none focus:ring-2 focus:ring-yellow-300"
               required
               disabled={!canEdit}
             />
@@ -144,7 +135,7 @@ export default function ModalUpdatePermission({
               value={endDate}
               onChange={(e) => setEndDate(e.target.value)}
               min={startDate || undefined}
-              className="mt-1 w-full rounded-md border p-2 bg-white text-gray-900 outline-none focus:ring-2 focus:ring-yellow-300"
+              className="mt-1 w-full rounded-md border bg-white p-2 text-gray-900 outline-none focus:ring-2 focus:ring-yellow-300"
               required
               disabled={!canEdit}
             />
@@ -159,7 +150,7 @@ export default function ModalUpdatePermission({
               type="url"
               value={supportingDocument}
               onChange={(e) => setSupportingDocument(e.target.value)}
-              className="mt-1 w-full rounded-md border p-2 bg-white text-gray-900 outline-none focus:ring-2 focus:ring-yellow-300"
+              className="mt-1 w-full rounded-md border bg-white p-2 text-gray-900 outline-none focus:ring-2 focus:ring-yellow-300"
               disabled={!canEdit}
             />
           </div>
@@ -168,18 +159,16 @@ export default function ModalUpdatePermission({
           <button
             type="submit"
             disabled={!canEdit}
-            className={`w-full rounded-md py-2 font-semibold transition-colors ${
+            className={`w-full cursor-pointer rounded-md py-2 font-semibold transition-colors ${
               canEdit
                 ? "bg-yellow-300 text-black hover:bg-yellow-400"
-                : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                : "cursor-not-allowed bg-gray-300 text-gray-500"
             }`}
           >
             Edit
           </button>
-
         </form>
       </div>
     </div>
   );
 }
-

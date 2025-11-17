@@ -28,10 +28,15 @@ export default function Register() {
 
     try {
       // Helper Anda sudah benar (menerima email & password)
-      await registerUser(email, password);
+      const { user } = await registerUser(email, password);
 
       // Jika sukses, token disimpan, arahkan ke 'lengkapi profil'
-      router.push("/register/complete");
+      // Admin jarang register via form ini, tapi untuk jaga-jaga
+      if (user?.role === "admin") {
+        router.push("/admin");
+      } else {
+        router.push("/register/complete");
+      }
     } catch (err) {
       setError(err.message);
       setLoading(false);
@@ -108,7 +113,7 @@ export default function Register() {
           <button
             type="submit"
             disabled={loading}
-            className="bg-pink-primary-200 font-farro-bold hover:bg-pink-primary-300 w-full rounded-lg py-3 text-gray-800 transition duration-300 disabled:opacity-50"
+            className="bg-pink-primary-200 font-farro-bold hover:bg-pink-primary-300 w-full cursor-pointer rounded-lg py-3 text-gray-800 transition duration-300 disabled:opacity-50"
           >
             {loading ? "Memproses..." : "Daftar"}
           </button>

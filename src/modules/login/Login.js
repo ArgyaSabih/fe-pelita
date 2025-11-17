@@ -21,10 +21,14 @@ export default function Login() {
 
     try {
       // 4. Panggil helper login
-      await loginUser(email, password);
+      const { user } = await loginUser(email, password);
 
-      // 5. Jika sukses, token sudah disimpan. Arahkan ke homepage.
-      router.push("/"); // Arahkan ke root (homepage/dashboard)
+      // 5. Jika sukses, token sudah disimpan. Redirect berdasarkan role
+      if (user?.role === "admin") {
+        router.push("/admin"); // Arahkan admin ke /admin
+      } else {
+        router.push("/"); // Arahkan user biasa ke homepage
+      }
     } catch (err) {
       // 6. Tangani error khusus
       if (err.message === "PROFILE_INCOMPLETE") {
@@ -92,7 +96,7 @@ export default function Login() {
           <button
             type="submit"
             disabled={loading} // 8. Nonaktifkan tombol saat loading
-            className="bg-pink-primary-200 font-farro-bold hover:bg-pink-primary-300 w-full rounded-lg py-3 text-gray-800 transition duration-300 disabled:opacity-50"
+            className="bg-pink-primary-200 font-farro-bold hover:bg-pink-primary-300 w-full cursor-pointer rounded-lg py-3 text-gray-800 transition duration-300 disabled:opacity-50"
           >
             {loading ? "Log In" : "Log In"}
           </button>
