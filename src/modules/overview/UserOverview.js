@@ -346,7 +346,7 @@ export default function UserOverview() {
                 </div>
               </div>
             ) : weather ? (
-              <div className="flex gap-8">
+              <div className="flex justify-between gap-8">
                 <div className="my-auto">
                   {willRainTomorrow() ? (
                     <h3 className="mb-4 text-xl font-bold text-white">
