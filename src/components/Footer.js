@@ -11,7 +11,7 @@ export default function Footer() {
   }
 
   return (
-    <footer className="w-full bg-[#112456] py-10 text-white">
+    <footer className="relative w-full bg-[#112456] py-10 text-white">
       <div className="container mx-auto px-6 md:px-12">
         <div className="grid grid-cols-1 gap-10 md:grid-cols-3">
           {/* Brand */}

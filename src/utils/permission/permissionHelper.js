@@ -1,9 +1,9 @@
 import axios from "axios";
 import fetchAPI from "@/utils/api/fetchAPI";
 
-// Create API instance for permission letters (baseURL can be moved to env later)
+// Create API instance for permission letters
 const permissionAPI = axios.create({
-  baseURL: "http://localhost:8000/api",
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
   headers: { "Content-Type": "application/json" },
   withCredentials: true,
 });
@@ -74,7 +74,7 @@ export async function deletePermissionLetter(id) {
 
 export function formatDate(dateString) {
   if (!dateString) return "-";
-  
+
   const date = new Date(dateString);
   const options = { year: "numeric", month: "long", day: "numeric" };
   return date.toLocaleDateString("id-ID", options);
@@ -105,4 +105,3 @@ export function getStatusText(status) {
       return "Unknown";
   }
 }
-

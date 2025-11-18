@@ -27,7 +27,7 @@ export default function Permission() {
   };
 
   return (
-    <div className="font-adlam-display-regular relative z-[-10] min-h-screen w-full bg-white pt-32 pb-20">
+    <div className="font-adlam-display-regular relative min-h-screen w-full bg-white pt-32 pb-20">
       {/* Dino image */}
       <div className="pointer-events-none absolute bottom-[-5.5rem] left-[-2.5rem] h-[18rem] w-[18rem] md:h-[20rem] md:w-[20rem]">
         <Image
