@@ -4,17 +4,31 @@ import { usePathname, useRouter } from "next/navigation";
 import { IoChevronForward } from "react-icons/io5";
 import { CgProfile } from "react-icons/cg";
 import { cn } from "@/utils/cn";
-import { memo } from "react";
+import { memo, useState, useEffect } from "react";
 import Swal from "sweetalert2";
 
-export const navItems = [
-  { href: "/schedule", label: "Schedule", type: ["underline"] },
-  { href: "/feedback", label: "Feedback", type: ["underline"] },
-  { href: "/announcement", label: "Announcement", type: ["underline"] },
-  { href: "/permission", label: "Permission", type: ["underline"] },
-  { href: "/login", label: "Logout", type: ["logout"] },
-  { href: "/profile", label: "Profile", type: ["profile"] },
-];
+// Function to get nav items based on login status
+export const getNavItems = (isLoggedIn) => {
+  if (!isLoggedIn) {
+    // Show only login and register buttons when not logged in
+    return [
+      { href: "/register", label: "Register", type: ["register"] },
+      { href: "/login", label: "Login", type: ["login"] },
+    ];
+  }
+
+  // Show full navigation when logged in
+  return [
+    { href: "/schedule", label: "Schedule", type: ["underline"] },
+    { href: "/feedback", label: "Feedback", type: ["underline"] },
+    { href: "/announcement", label: "Announcement", type: ["underline"] },
+    { href: "/permission", label: "Permission", type: ["underline"] },
+    { href: "/login", label: "Logout", type: ["logout"] },
+    { href: "/profile", label: "Profile", type: ["profile"] },
+  ];
+};
+
+export const navItems = getNavItems(true); // Default for SSR
 
 const navItemsType = {
   base: "rounded-[0.5rem] text-black w-full lg:px-[0.9vw] lg:py-[0.7vw] xl:px-3.5 xl:py-2 max-2xl:max-h-9 flex text-[3.5vw] xxs:text-[3.3vw] xs:text-[3vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[1.3vw] xl:text-[1.1vw] 2xl:text-[1.1rem] whitespace-nowrap transition-all duration-300 group max-lg:justify-between max-lg:items-center max-lg:text-left max-lg:px-4 max-lg:py-3 lg:justify-center lg:text-center",

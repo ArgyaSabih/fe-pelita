@@ -46,6 +46,22 @@ export default function Register() {
   return (
     <AuthCard>
       <div className="font-farro-medium w-full max-w-sm">
+        {/* Back Button */}
+        <Link
+          href="/"
+          className="mb-6 inline-flex items-center text-gray-600 transition-colors hover:text-gray-900"
+        >
+          <svg className="mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M10 19l-7-7m0 0l7-7m-7 7h18"
+            />
+          </svg>
+          Kembali ke Home
+        </Link>
+
         {/* Logo Mobile */}
         <div className="mb-8 flex justify-center md:hidden">
           <Image
