@@ -3,13 +3,15 @@ import React, { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { cn } from "@/utils/cn";
-import { navItems, RenderNavItem } from "@/components/navbar/NavHelper";
+import { getNavItems, RenderNavItem } from "@/components/navbar/NavHelper";
 import { usePathname } from "next/navigation";
 import HamburgerButton from "./HamburgerButton";
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [navItems, setNavItems] = useState([]);
   const pathname = usePathname();
   const closeMenu = useCallback(() => setIsMenuOpen(false), [setIsMenuOpen]);
 
@@ -22,8 +24,18 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  useEffect(() => {
+    // Check if user is logged in
+    const token = localStorage.getItem("accessToken");
+    const loggedIn = !!token;
+    setIsLoggedIn(loggedIn);
+    setNavItems(getNavItems(loggedIn));
+  }, [pathname]); // Re-check on route change
+
   // Hide Navbar for included routes
-  if (pathname?.includes("/admin")) {
+  const isAuthRoute = pathname?.includes("/login") || pathname?.includes("/register");
+
+  if (pathname?.includes("/admin") || isAuthRoute) {
     return null;
   }
 

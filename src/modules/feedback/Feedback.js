@@ -1,13 +1,18 @@
 "use client";
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import { fetchUser, fetchFeedbacksByParent, createFeedback, updateFeedback, deleteFeedback } from "@/utils/feedback/feedbackHelper";
+import {
+  fetchUser,
+  fetchFeedbacksByParent,
+  createFeedback,
+  updateFeedback,
+  deleteFeedback,
+} from "@/utils/feedback/feedbackHelper";
 import { FiSearch, FiPlus } from "react-icons/fi";
 import FeedbackCard from "@/components/feedback/FeedbackCard";
 import ModalCreateFeedback from "@/components/feedback/ModalCreateFeedback";
 import ModalUpdateFeedback from "@/components/feedback/ModalUpdateFeedback";
 import ModalDeleteFeedback from "@/components/feedback/ModalDeleteFeedback";
-
 
 export default function Feedback() {
   const [allFeedbacks, setAllFeedbacks] = useState([]);
@@ -52,7 +57,6 @@ export default function Feedback() {
     load();
   }, []);
 
-
   const totalPages = Math.ceil(allFeedbacks.length / itemsPerPage);
 
   const startIndex = (currentPage - 1) * itemsPerPage;
@@ -79,7 +83,6 @@ export default function Feedback() {
 
   return (
     <div className="font-adlam-display-regular relative min-h-screen w-full bg-white pt-32 pb-20">
-
       {/* Dino image */}
       <div className="pointer-events-none absolute bottom-[-5.5rem] left-[-2.5rem] h-[18rem] w-[18rem] md:h-[20rem] md:w-[20rem]">
         <Image
@@ -90,26 +93,22 @@ export default function Feedback() {
         />
       </div>
 
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-
+      <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header With Button */}
         <div className="mb-8 flex items-center justify-between">
           <div>
-            <h1 className="mb-2 text-4xl font-bold text-gray-900 md:text-4xl">
-              Feedback
-            </h1>
+            <h1 className="mb-2 text-4xl font-bold text-gray-900 md:text-4xl">Feedback</h1>
             <p className="text-lg text-gray-700">Kelola saran dan keluhan Anda</p>
           </div>
 
           <button
             onClick={openCreateModal}
-            className="flex items-center gap-3 bg-[#0A1F44] text-white 
-                      px-5 py-3 rounded-xl hover:bg-[#0d2a5f] transition shadow-sm"
+            className="flex items-center gap-3 rounded-xl bg-[#0A1F44] px-5 py-3 text-white shadow-sm transition hover:bg-[#0d2a5f]"
           >
             <FiPlus className="text-2xl" />
-            <div className="flex flex-col leading-tight text-left">
-              <span className="font-semibold text-base">Tambah</span>
-              <span className="font-semibold text-base">Feedback</span>
+            <div className="flex flex-col text-left leading-tight">
+              <span className="text-base font-semibold">Tambah</span>
+              <span className="text-base font-semibold">Feedback</span>
             </div>
           </button>
         </div>
@@ -176,7 +175,7 @@ export default function Feedback() {
           await createFeedback({
             parentId: user.id,
             type: data.type,
-            content: data.content
+            content: data.content,
           });
 
           await loadFeedbacks(user.id);
