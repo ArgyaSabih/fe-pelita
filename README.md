@@ -1,8 +1,25 @@
 # Repositori Front-End PELITA
+PELITA: Pendamping Teliti Anak TK
 
-## Design
+Platform pengawasan kegiatan anak TK dan jembatan komunikasi antara orang tua dengan sekolah berbasis web.
+
+# Kelompok 15 (PELITA)
+1. Argya Sabih Elysio - 23/512630/TK/56335
+2. Christian Kevin Andhika Dandaiva - 23/513576/TK/56433
+3. Lisa Olivia Putri Maharani - 23/519241/TK/57250
+4. Pradana Yahya Abdillah - 23/515259/TK/56625
+5. Muhammad Hafidz Al Farisi - 23/519650/TK/57256
+
+## Design 
 
 [Figma Link](https://www.figma.com/design/rmw1qUPakQVQWuFIcT4LCi/PAW---PELITA?t=TlzjDUQPXhgfduHT-1)
+
+## Video Demo dan Presentasi  
+
+[Video Link](https://drive.google.com/file/d/1xCTvP4dNahc8SoAAmJk1Vx5eof2YTOu3/view?usp=drive_link)
+
+## Web App Deployment
+[Deployment Link](https://fe-pelita-production.up.railway.app/)
 
 ## How To Run
 
