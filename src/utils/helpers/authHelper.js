@@ -28,7 +28,8 @@ export const registerUser = async (email, password) => {
 export const completeProfile = async (profileData) => {
   try {
     const response = await fetchAPI.put("/users/complete-profile", profileData);
-    return response.data;
+    const { user } = response.data.data || {};
+    return { success: true, user };
   } catch (error) {
     console.error("Complete profile error:", error.response?.data?.message || error.message);
     throw new Error(error.response?.data?.message || "Gagal melengkapi profil");

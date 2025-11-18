@@ -54,14 +54,22 @@ function CompleteProfileForm() {
     setError(null);
 
     try {
+      let result;
       if (isGoogleFlow) {
         const payload = { tempToken: token, name, phoneNumber, address, childCode };
-        await completeGoogleRegistration(payload);
+        result = await completeGoogleRegistration(payload);
       } else {
         const payload = { name, phoneNumber, address, childCode };
-        await completeProfile(payload);
+        result = await completeProfile(payload);
       }
-      router.push("/");
+
+      // Redirect berdasarkan role user
+      const userRole = result?.user?.role;
+      if (userRole === "admin") {
+        router.push("/admin");
+      } else {
+        router.push("/");
+      }
     } catch (err) {
       setError(err.message);
       setLoading(false);
@@ -178,7 +186,7 @@ function CompleteProfileForm() {
                 <button
                   type="submit"
                   disabled={loading || !token}
-                  className="bg-pink-primary-200 font-farro-bold hover:bg-pink-primary-300 mt-4 ml-auto block rounded-lg px-6 py-3 text-gray-900 transition duration-300 disabled:opacity-50"
+                  className="bg-pink-primary-200 font-farro-bold hover:bg-pink-primary-300 mt-4 ml-auto block cursor-pointer rounded-lg px-6 py-3 text-gray-900 transition duration-300 disabled:opacity-50"
                 >
                   {loading ? "Menyimpan..." : "Finish"}
                 </button>

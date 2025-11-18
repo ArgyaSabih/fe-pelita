@@ -21,10 +21,14 @@ export default function Login() {
 
     try {
       // 4. Panggil helper login
-      await loginUser(email, password);
+      const { user } = await loginUser(email, password);
 
-      // 5. Jika sukses, token sudah disimpan. Arahkan ke homepage.
-      router.push("/"); // Arahkan ke root (homepage/dashboard)
+      // 5. Jika sukses, token sudah disimpan. Redirect berdasarkan role
+      if (user?.role === "admin") {
+        router.push("/admin"); // Arahkan admin ke /admin
+      } else {
+        router.push("/"); // Arahkan user biasa ke homepage
+      }
     } catch (err) {
       // 6. Tangani error khusus
       if (err.message === "PROFILE_INCOMPLETE") {
@@ -42,6 +46,22 @@ export default function Login() {
   return (
     <AuthCard>
       <div className="font-farro-medium w-full max-w-sm">
+        {/* Back Button */}
+        <Link
+          href="/"
+          className="mb-6 inline-flex items-center text-gray-600 transition-colors hover:text-gray-900"
+        >
+          <svg className="mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M10 19l-7-7m0 0l7-7m-7 7h18"
+            />
+          </svg>
+          Kembali ke Home
+        </Link>
+
         {/* Logo Mobile */}
         <div className="mb-8 flex justify-center md:hidden">
           <Image
@@ -92,7 +112,7 @@ export default function Login() {
           <button
             type="submit"
             disabled={loading} // 8. Nonaktifkan tombol saat loading
-            className="bg-pink-primary-200 font-farro-bold hover:bg-pink-primary-300 w-full rounded-lg py-3 text-gray-800 transition duration-300 disabled:opacity-50"
+            className="bg-pink-primary-200 font-farro-bold hover:bg-pink-primary-300 w-full cursor-pointer rounded-lg py-3 text-gray-800 transition duration-300 disabled:opacity-50"
           >
             {loading ? "Log In" : "Log In"}
           </button>
